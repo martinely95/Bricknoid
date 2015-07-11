@@ -65,7 +65,7 @@ class Draw:
                 "Press 'Esc' to go back.",
                 self.constants.WHITE,
                 self.constants.CENTER_COORDS[0] - 250,
-                self.constants.CENTER_COORDS[1])
+                self.constants.CENTER_COORDS[1] + 50)
 
     def bricks(self, bricks):
         for brick in bricks:

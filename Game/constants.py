@@ -2,7 +2,7 @@ class GameConstants:
 
     def __init__(self):
         # screen
-        self.SCREEN_SIZE = 960, 540
+        self.SCREEN_SIZE = 680, 680
         self.CENTER_COORDS = (self.SCREEN_SIZE[0] / 2, self.SCREEN_SIZE[1] / 2)
 
         # objects
@@ -13,7 +13,7 @@ class GameConstants:
         self.BALL_DIAMETER = 10
         self.BALL_RADIUS = self.BALL_DIAMETER / 2
 
-        self.MIN_BRICKS_X = self.SCREEN_SIZE[0] / 5
+        self.MIN_BRICKS_X = (self.SCREEN_SIZE[0] - 620) / 2
         self.MAX_PADDLE_X = self.SCREEN_SIZE[0] - self.PADDLE_WIDTH
         self.MIN_PADDLE_X = 0
         self.MAX_BALL_X = self.SCREEN_SIZE[0] - self.BALL_DIAMETER

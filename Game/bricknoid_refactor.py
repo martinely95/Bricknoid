@@ -144,14 +144,9 @@ class Bricknoid:
             self.ball.top = self.constants.MIN_BALL_Y
             self.ball_vel[1] = -self.ball_vel[1]
 
-    def decide_new_direction(self, brick):
-        # for i in range(self.last_ball_pos[0], self.ball.left + 1):
-        #     for j in range(brick.left, brick.left + self.constants.BRICK_WIDTH + 1)
-        #         if (self.last_ball_pos[0] + i, self.last_ball_pos[1] + i) is
-
-
-        delta_x = self.last_ball_pos[0] - self.ball.left
-        delta_y = self.last_ball_pos[1] - self.ball.top
+    def decide_new_direction_and_remove_brick(self, brick):
+        delta_x = -self.last_ball_pos[0] + self.ball.left
+        delta_y = -self.last_ball_pos[1] + self.ball.top
 
         top_middle = (brick.left + self.constants.BRICK_WIDTH / 2,
                       brick.top)
@@ -171,34 +166,64 @@ class Bricknoid:
         right_middle_delta = ((right_middle[0] - self.ball.left) ** 2 +
                               (right_middle[1] - self.ball.top) ** 2) ** 0.5
 
+        self.bricks.remove(brick)
+
         if delta_x > 0 and delta_y > 0:
             if top_middle_delta < left_middle_delta:
                 self.ball_vel[1] *= -1
             else:
                 self.ball_vel[0] *= -1
+                self.ball.left -= 25
+                self.ball.top += 25
+                if self.check_for_bricks():
+                    self.ball_vel[1] *= -1
+                self.ball.left += 25
+                self.ball.top -= 25
         if delta_x < 0 and delta_y > 0:
             if top_middle_delta < right_middle_delta:
                 self.ball_vel[1] *= -1
             else:
                 self.ball_vel[0] *= -1
+                self.ball.left += 25
+                self.ball.top += 25
+                if self.check_for_bricks():
+                    self.ball_vel[1] *= -1
+                self.ball.left -= 25
+                self.ball.top -= 25
         if delta_x > 0 and delta_y < 0:
             if down_middle_delta < left_middle_delta:
                 self.ball_vel[1] *= -1
             else:
                 self.ball_vel[0] *= -1
+                self.ball.left -= 25
+                self.ball.top -= 25
+                if self.check_for_bricks():
+                    self.ball_vel[1] *= -1
+                self.ball.left += 25
+                self.ball.top += 25
         if delta_x < 0 and delta_y < 0:
             if down_middle_delta < right_middle_delta:
                 self.ball_vel[1] *= -1
             else:
                 self.ball_vel[0] *= -1
+                self.ball.left += 25
+                self.ball.top -= 25
+                if self.check_for_bricks():
+                    self.ball_vel[1] *= -1
+                self.ball.left -= 25
+                self.ball.top += 25
+
+    def check_for_bricks(self):
+        for brick in self.bricks:
+            if self.ball.colliderect(brick):
+                return True
 
     def handle_collisions(self):
         for brick in self.bricks:
             if self.ball.colliderect(brick):
                 # self.ball_vel[0] = -self.ball_vel[0]
                 # self.ball_vel[1] = -self.ball_vel[1]
-                self.decide_new_direction(brick)
-                self.bricks.remove(brick)
+                self.decide_new_direction_and_remove_brick(brick)
                 self.score += 5
                 break
 
@@ -286,7 +311,7 @@ class Bricknoid:
 
         fps = 0
         while running[0]:
-            self.clock.tick(70)
+            self.clock.tick(60)
 
             fps += 1
             fps = self.calculate_fps(fps)
