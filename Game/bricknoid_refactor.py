@@ -3,6 +3,7 @@ import time  # time.sleep(0.005) and fps
 from constants import GameConstants
 from load_levels import Levels
 from draw import Draw
+import highscores
 
 
 class Bricknoid:
@@ -221,8 +222,6 @@ class Bricknoid:
     def handle_collisions(self):
         for brick in self.bricks:
             if self.ball.colliderect(brick):
-                # self.ball_vel[0] = -self.ball_vel[0]
-                # self.ball_vel[1] = -self.ball_vel[1]
                 self.decide_new_direction_and_remove_brick(brick)
                 self.score += 5
                 break
@@ -275,6 +274,8 @@ class Bricknoid:
             self.drawer.show_message("PRESS SPACE TO START")
         elif self.state is self.constants.STATES["GAME_OVER"]:
             self.drawer.show_message("GAME OVER. PRESS ENTER TO RESTART")
+            if highscores.check_if_highscore(str(self.score)):
+                highscores.insert_highscore(str(self.score), "martin")
         elif self.state is self.constants.STATES["WON"]:
             self.drawer.show_message(
                 "YOU WON! PRESS ENTER TO PLAY THE NEXT LEVEL"
@@ -284,6 +285,8 @@ class Bricknoid:
             self.drawer.show_message(
                 "CONGRATULATIONS, YOU'VE COMPLETED THE GAME!!"
             )
+            if highscores.check_if_highscore(str(self.score)):
+                highscores.insert_highscore(str(self.score), "martin")
 
     def print_current_state(self):
         # drawing
